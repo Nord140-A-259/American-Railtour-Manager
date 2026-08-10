@@ -1,0 +1,979 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>American Railtour Manager</title>
+<style>
+  :root{
+    --Pullman-Green:#303B1B;        /* Pullman Car Co. Green */
+    --br-blue-dk:#0c2740;
+    --lms-maroon:#6e1f24;     /* LMS crimson lake */
+    --gwr-green:#0f5132;
+    --coach-cream:#f4ecd6;
+    --warn:#e0a800;
+    --danger:#a83232;
+    --good:#2e7d32;
+    --ink:#1b2430;
+    --panel:#fbf7ee;
+    --line:#d7cdb8;
+    --shadow:0 2px 6px rgba(0,0,0,.18);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    font-family:"Segoe UI",Tahoma,Verdana,sans-serif;
+    background:#e7e1d3 url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='40' height='40'><rect width='40' height='40' fill='%23e7e1d3'/><path d='M0 39 H40' stroke='%23d9d1c0' stroke-width='1'/></svg>");
+    color:var(--ink);
+    line-height:1.45;
+  }
+  header{
+    background:linear-gradient(180deg,var(--br-blue),var(--br-blue-dk));
+    color:#fff;border-bottom:4px solid var(--warn);
+  }
+  .brand{
+    display:flex;align-items:center;gap:14px;padding:12px 18px;max-width:1200px;margin:0 auto;
+    flex-wrap:wrap;
+  }
+  .roundel{
+    width:46px;height:34px;flex:0 0 auto;position:relative;
+  }
+  .roundel::before{content:"";position:absolute;inset:14px 0;background:#fff;}
+  .roundel::after{
+    content:"";position:absolute;top:0;bottom:0;left:8px;width:6px;background:#fff;
+    box-shadow:24px 0 0 #fff; transform:skewX(-18deg);
+  }
+  h1{font-size:1.35rem;margin:0;letter-spacing:.5px;font-weight:700}
+  h1 small{display:block;font-size:.72rem;font-weight:400;opacity:.8;letter-spacing:2px;text-transform:uppercase}
+  .stats{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
+  .stat{
+    background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.25);
+    border-radius:6px;padding:5px 11px;min-width:86px;text-align:center;
+  }
+  .stat b{display:block;font-size:1.02rem}
+  .stat span{font-size:.62rem;text-transform:uppercase;letter-spacing:1px;opacity:.8}
+  .stat.cash b{color:#ffe9a8}
+  nav{background:var(--br-blue-dk);border-bottom:3px solid var(--warn)}
+  .tabs{max-width:1200px;margin:0 auto;display:flex;flex-wrap:wrap}
+  .tabs button{
+    background:none;border:none;color:#cdd8e6;padding:12px 18px;cursor:pointer;
+    font-size:.82rem;font-weight:600;letter-spacing:.4px;border-bottom:3px solid transparent;
+    text-transform:uppercase;
+  }
+  .tabs button:hover{color:#fff;background:rgba(255,255,255,.06)}
+  .tabs button.active{color:#fff;border-bottom-color:var(--warn);background:rgba(255,255,255,.09)}
+  main{max-width:1200px;margin:0 auto;padding:18px}
+  .view{display:none;animation:fade .2s ease}
+  .view.active{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1}}
+  h2{color:var(--br-blue);border-bottom:2px solid var(--line);padding-bottom:6px;margin-top:0;font-size:1.2rem}
+  .lede{color:#4a545f;font-size:.9rem;margin-top:-4px}
+  .grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fill,minmax(280px,1fr))}
+  .card{
+    background:var(--panel);border:1px solid var(--line);border-radius:8px;
+    box-shadow:var(--shadow);padding:14px;position:relative;
+  }
+  .card h3{margin:0 0 2px;font-size:1.02rem;color:var(--ink);display:flex;align-items:center;gap:8px}
+  .badge{
+    font-size:.6rem;text-transform:uppercase;letter-spacing:.6px;padding:2px 7px;border-radius:20px;
+    color:#fff;font-weight:700;vertical-align:middle;
+  }
+  .b-steam{background:var(--lms-maroon)}
+  .b-diesel{background:var(--br-blue)}
+  .b-rake{background:var(--gwr-green)}
+  .b-route{background:#7a4a12}
+  .sub{color:#6a7480;font-size:.8rem;margin:0 0 8px;font-style:italic}
+  .specs{list-style:none;padding:0;margin:8px 0;font-size:.82rem}
+  .specs li{display:flex;justify-content:space-between;padding:2px 0;border-bottom:1px dashed #e4dcc8}
+  .specs li span:last-child{font-weight:600}
+  .price{font-size:1.1rem;font-weight:700;color:var(--lms-maroon)}
+  button.act{
+    background:var(--br-blue);color:#fff;border:none;border-radius:6px;padding:9px 14px;
+    cursor:pointer;font-weight:600;font-size:.85rem;width:100%;margin-top:6px;
+  }
+  button.act:hover{background:var(--br-blue-dk)}
+  button.act:disabled{background:#9aa2ab;cursor:not-allowed}
+  button.act.warnbtn{background:var(--lms-maroon)}
+  button.act.warnbtn:hover{background:#521418}
+  button.small{width:auto;padding:6px 12px;font-size:.78rem;margin:0}
+  .bar{height:9px;border-radius:5px;background:#e2dac6;overflow:hidden;margin:3px 0 2px}
+  .bar > i{display:block;height:100%;transition:width .3s}
+  .cond-lbl{font-size:.72rem;color:#6a7480;display:flex;justify-content:space-between}
+  .swatch{display:inline-block;width:14px;height:14px;border-radius:3px;border:1px solid rgba(0,0,0,.35);vertical-align:middle;margin-right:6px}
+  .livery-line{display:flex;align-items:center;gap:2px;font-size:.82rem;margin:2px 0 6px;color:var(--ink)}
+  .repaint{display:block;font-size:.75rem;color:#6a7480;margin:8px 0 2px;text-transform:uppercase;letter-spacing:.4px}
+  .repaint .mini{text-transform:none;letter-spacing:0}
+  .repaint select{width:100%;margin-top:3px;padding:6px 8px;border:1px solid var(--line);border-radius:6px;background:#fff;font-size:.82rem;color:var(--ink)}
+  .empty{color:#8a94a0;font-style:italic;padding:24px;text-align:center;border:2px dashed var(--line);border-radius:8px}
+  /* Run tour layout */
+  .picker{display:grid;gap:14px;grid-template-columns:1fr 1fr 1fr}
+  @media(max-width:900px){.picker{grid-template-columns:1fr}}
+  .picker h4{margin:0 0 8px;color:var(--br-blue);font-size:.9rem;text-transform:uppercase;letter-spacing:.5px}
+  .opt{
+    background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:9px 11px;cursor:pointer;
+    margin-bottom:8px;font-size:.82rem;transition:.12s;
+  }
+  .opt:hover{border-color:var(--br-blue)}
+  .opt.sel{border:2px solid var(--br-blue);background:#eef4fb}
+  .opt.disabled{opacity:.45;cursor:not-allowed}
+  .opt b{display:block}
+  .opt .mini{color:#6a7480;font-size:.74rem}
+  .projection{
+    background:#fff;border:1px solid var(--line);border-radius:8px;padding:16px;margin-top:16px;box-shadow:var(--shadow);
+  }
+  .proj-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin:10px 0}
+  .proj-cell{text-align:center;background:var(--panel);border-radius:6px;padding:8px}
+  .proj-cell b{display:block;font-size:1.15rem}
+  .proj-cell span{font-size:.68rem;text-transform:uppercase;letter-spacing:.5px;color:#6a7480}
+  .risk-lo{color:var(--good)} .risk-md{color:var(--warn)} .risk-hi{color:var(--danger)}
+  .ledger{font-size:.8rem;max-height:260px;overflow:auto;border:1px solid var(--line);border-radius:8px;background:var(--panel)}
+  .ledger table{width:100%;border-collapse:collapse}
+  .ledger td{padding:6px 10px;border-bottom:1px solid #eae1cd}
+  .ledger td:last-child{text-align:right;font-weight:600;white-space:nowrap}
+  .pos{color:var(--good)} .neg{color:var(--danger)}
+  /* modal */
+  .modal-bg{
+    display:none;position:fixed;inset:0;background:rgba(12,25,40,.65);z-index:50;
+    align-items:center;justify-content:center;padding:16px;
+  }
+  .modal-bg.show{display:flex}
+  .modal{
+    background:var(--coach-cream);border:3px solid var(--br-blue);border-radius:10px;max-width:560px;width:100%;
+    max-height:90vh;overflow:auto;box-shadow:0 10px 40px rgba(0,0,0,.4);
+  }
+  .modal .head{background:var(--br-blue);color:#fff;padding:12px 18px;font-weight:700;font-size:1.05rem}
+  .modal .body{padding:18px}
+  .modal .body p{margin:.4rem 0;font-size:.9rem}
+  .event{background:#fff;border-left:4px solid var(--warn);padding:8px 12px;margin:8px 0;font-size:.85rem;border-radius:0 6px 6px 0}
+  .event.bad{border-left-color:var(--danger)}
+  .event.good{border-left-color:var(--good)}
+  .rep-tier{display:inline-block;padding:2px 9px;border-radius:20px;background:var(--gwr-green);color:#fff;font-size:.7rem;font-weight:700}
+  .toolbar{display:flex;gap:10px;flex-wrap:wrap;margin:10px 0 18px;align-items:center}
+  .toolbar .season{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:6px 12px;font-size:.82rem}
+  footer{max-width:1200px;margin:10px auto 30px;padding:0 18px;color:#6a7480;font-size:.76rem;text-align:center}
+  a{color:var(--br-blue)}
+  .win-banner{background:var(--gwr-green);color:#fff;padding:10px 16px;border-radius:8px;margin-bottom:14px;font-weight:600}
+  .busy-tag{background:#fbeecb;border:1px solid #e5c977;color:#7a5a12;font-size:.74rem;font-weight:600;border-radius:6px;padding:4px 8px;margin:2px 0 8px}
+  .report-block.failed{background:#fbeaea;border:1px solid #e2b4b4;border-radius:8px;padding:10px;margin:-2px 0}
+  .actionbar{
+    position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:12px;flex-wrap:wrap;
+    background:var(--coach-cream);border:1px solid var(--line);border-left:5px solid var(--warn);
+    border-radius:8px;padding:9px 14px;margin-bottom:14px;box-shadow:var(--shadow);
+  }
+  .actionbar #ab-info{font-size:.85rem;color:var(--ink)}
+  .actionbar #ab-info b{color:var(--br-blue)}
+  .actionbar button{margin-left:auto;width:auto;background:var(--gwr-green)}
+  .actionbar button:hover{background:#0b3d26}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">
+    <div class="roundel" title="British Rail"></div>
+    <h1>American Railtour Manager<small>Charter Excursion Operator</small></h1>
+    <div class="stats">
+      <div class="stat cash"><b id="s-cash">—</b><span>Balance</span></div>
+      <div class="stat"><b id="s-rep">—</b><span>Reputation</span></div>
+      <div class="stat"><b id="s-fleet">—</b><span>Fleet</span></div>
+      <div class="stat"><b id="s-week">—</b><span id="s-season">Season</span></div>
+    </div>
+  </div>
+</header>
+<nav>
+  <div class="tabs">
+    <button data-tab="depot" class="active">Depot</button>
+    <button data-tab="power">Motive Power</button>
+    <button data-tab="carriages">Carriages</button>
+    <button data-tab="run">Run a Railtour</button>
+    <button data-tab="works">Works &amp; Overhaul</button>
+    <button data-tab="log">Ledger</button>
+    <button data-tab="help">How to Play</button>
+  </div>
+</nav>
+
+<main>
+  <div class="actionbar">
+    <div id="ab-info"></div>
+    <button class="act" id="btn-advance">Advance One Week ▸</button>
+  </div>
+  <div id="winBanner"></div>
+
+  <!-- DEPOT -->
+  <section class="view active" id="v-depot">
+    <h2>Your Depot</h2>
+    <p class="lede">Your owned locomotives and carriage sets. Keep condition healthy — a failure on the road wrecks your reputation.</p>
+    <h3 style="color:#6e1f24">Motive Power</h3>
+    <div class="grid" id="depot-locos"></div>
+    <h3 style="color:#0f5132;margin-top:22px">Carriage Sets</h3>
+    <div class="grid" id="depot-rakes"></div>
+  </section>
+
+  <!-- MARKET: LOCOS -->
+  <section class="view" id="v-power">
+    <h2>Motive Power Market</h2>
+    <p class="lede">Buy preserved steam locomotives and heritage diesels. Steam pulls the biggest crowds; diesels are reliable and cheaper to run.</p>
+    <div class="grid" id="market-locos"></div>
+  </section>
+
+  <!-- MARKET: CARRIAGES -->
+  <section class="view" id="v-carriages">
+    <h2>Carriage Market</h2>
+    <p class="lede">A locomotive is nothing without a rake. Bigger sets carry more fares; luxury Pullman stock commands premium tickets.</p>
+    <div class="grid" id="market-rakes"></div>
+  </section>
+
+  <!-- RUN -->
+  <section class="view" id="v-run">
+    <h2>Plan a Railtour</h2>
+    <p class="lede">Choose one locomotive, one carriage set and a route, then check the projection before you depart.</p>
+    <div class="picker">
+      <div><h4>1 · Locomotive</h4><div id="pick-loco"></div></div>
+      <div><h4>2 · Carriage Set</h4><div id="pick-rake"></div></div>
+      <div><h4>3 · Route</h4><div id="pick-route"></div></div>
+    </div>
+    <div id="projection"></div>
+  </section>
+
+  <!-- WORKS -->
+  <section class="view" id="v-works">
+    <h2>Works &amp; Overhaul</h2>
+    <p class="lede">Send tired locomotives and rakes to the works to restore condition. A full overhaul costs more but returns them to as-new.</p>
+    <div class="grid" id="works-list"></div>
+  </section>
+
+  <!-- LOG -->
+  <section class="view" id="v-log">
+    <h2>Company Ledger</h2>
+    <p class="lede">Every transaction, tour and mishap, most recent first.</p>
+    <div class="ledger"><table id="ledger-body"></table></div>
+  </section>
+
+  <!-- HELP -->
+  <section class="view" id="v-help">
+    <h2>How to Play</h2>
+    <div class="card" style="max-width:760px">
+      <p>You run a British charter railtour company. Buy <b>motive power</b> (steam locos and heritage diesels) and <b>carriage sets</b>, then run <b>railtours</b> over the great scenic lines of Britain to turn a profit and build your reputation.</p>
+      <ul style="font-size:.9rem">
+        <li><b>Dispatching a tour ties up its locomotive and carriage set</b> for the length of the run (1–3 weeks, longer for longer routes). They can't run again until they return. Press <b>Advance One Week</b> (top of every screen) to pass the time — so a bigger fleet lets you keep several tours on the road at once.</li>
+        <li><b>You only find out how a tour went when the train returns.</b> The result — the takings, the reputation swing, and whether the loco failed en route — is revealed when it's back in the yard, not when you dispatch it.</li>
+        <li><b>Reputation</b> drives demand and ticket prices. Full, reliable, scenic tours build it; breakdowns and half-empty trains destroy it.</li>
+        <li><b>Condition</b> falls every tour — harder on steam and on steeply-graded routes. Overhaul at the <b>Works</b> before a loco gets unreliable.</li>
+        <li><b>Haulage:</b> if a rake has more coaches than a loco can comfortably haul, you'll pay for an assisting loco and risk failure — match power to load.</li>
+        <li><b>Steam-favoured routes</b> reward steam haulage with a bigger crowd; the enthusiasts turn out for the classics.</li>
+        <li><b>Liveries:</b> repaint any locomotive in the Depot. Iconic liveries give a small public-draw bonus — the crowds love a favourite.</li>
+        <li><b>Season</b> shifts demand — summer is boom time, winter is lean (bar the festive Santa specials).</li>
+        <li><b>Goal:</b> reach a company net worth of <b>£1,000,000</b> to be named <i>Railtour Operator of the Year</i>. Let the balance stay negative into a new week and you're in receivership.</li>
+      </ul>
+      <div class="toolbar">
+        <button class="act small warnbtn" id="btn-newgame">Start a New Company</button>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  UK Railtour Manager · a self-contained browser tycoon · progress auto-saves in your browser ·
+  routes and rolling stock inspired by real British railtour operations.
+</footer>
+
+<div class="modal-bg" id="modalBg">
+  <div class="modal">
+    <div class="head" id="modalHead">Railtour Report</div>
+    <div class="body" id="modalBody"></div>
+    <div class="body" style="padding-top:0"><button class="act" id="modalClose">Continue</button></div>
+  </div>
+</div>
+
+<script>
+"use strict";
+/* ============================ CATALOGUE ============================ */
+const CATALOG_STEAM = [
+  {key:"p-7", name:"B&O P-7 'President", number:"5300", cost:42000, draw:1.12, reliability:0.86, maxHaul:12, runPerMile:24, wear:1.05, topSpeed:75,
+   blurb:"The express stars, named after U. S. presidents.",
+   liveries:[{name:"B&O Black",colour:"#1c1c1c",draw:0},{name:"B&O Olive",colour:"#4F6841",draw:0.04},
+  {key:"9f", name:"BR Standard 9F", number:"92214", cost:56000, draw:1.05, reliability:0.83, maxHaul:13, runPerMile:31, wear:1.15, topSpeed:60,
+   blurb:"A brute of a freight engine — hauls anything up any bank.",
+   liveries:[{name:"BR Black",colour:"#1c1c1c",draw:0},{name:"BR Green (Evening Star)",colour:"#0f5132",draw:0.06},{name:"Weathered Freight Black",colour:"#171717",draw:0.01}]},
+  {key:"castle", name:"GWR 'Castle' Class", number:"5043", cost:74000, draw:1.28, reliability:0.81, maxHaul:10, runPerMile:29, wear:1.1, topSpeed:80,
+   blurb:"Copper-capped Great Western elegance with a real turn of speed.",
+   liveries:[{name:"GWR Brunswick Green",colour:"#0f5132",draw:0.03},{name:"BR Brunswick Green",colour:"#14512e",draw:0},{name:"GWR Wartime Black",colour:"#141414",draw:0.01}]},
+  {key:"britannia", name:"BR Standard 7 'Britannia'", number:"70000", cost:92000, draw:1.35, reliability:0.80, maxHaul:11, runPerMile:30, wear:1.15, topSpeed:90,
+   blurb:"The first BR Standard Pacific — a modern mixed-traffic classic.",
+   liveries:[{name:"BR Brunswick Green",colour:"#14512e",draw:0},{name:"BR Lined Black",colour:"#1c1c1c",draw:0.01},{name:"BR Express Blue",colour:"#14396b",draw:0.03}]},
+  {key:"a4", name:"LNER Class A4", number:"60007", cost:124000, draw:1.55, reliability:0.76, maxHaul:11, runPerMile:34, wear:1.2, topSpeed:90,
+   blurb:"Streamlined Gresley thoroughbred — 'Sir Nigel Gresley' herself.",
+   liveries:[{name:"LNER Garter Blue",colour:"#14396b",draw:0.06},{name:"BR Brunswick Green",colour:"#14512e",draw:0.02},{name:"Silver Grey (Silver Jubilee)",colour:"#b9c0c7",draw:0.05},{name:"LNER Wartime Black",colour:"#141414",draw:0}]},
+  {key:"king", name:"GWR 'King' Class", number:"6023", cost:150000, draw:1.60, reliability:0.74, maxHaul:11, runPerMile:34, wear:1.25, topSpeed:88,
+   blurb:"The Great Western's heavyweight champion — 'King Edward II'.",
+   liveries:[{name:"GWR Brunswick Green",colour:"#0f5132",draw:0.04},{name:"BR Brunswick Green",colour:"#14512e",draw:0},{name:"GWR Wartime Black",colour:"#141414",draw:0.01}]},
+  {key:"mn", name:"SR 'Merchant Navy' Class", number:"35028", cost:158000, draw:1.70, reliability:0.72, maxHaul:12, runPerMile:36, wear:1.30, topSpeed:90,
+   blurb:"Bulleid's air-smoothed Pacific — 'Clan Line' in full cry.",
+   liveries:[{name:"BR Brunswick Green",colour:"#14512e",draw:0},{name:"Southern Malachite Green",colour:"#1f7a44",draw:0.06},{name:"BR Express Blue",colour:"#14396b",draw:0.03}]},
+  {key:"tornado", name:"LNER Peppercorn A1 'Tornado'", number:"60163", cost:168000, draw:1.80, reliability:0.82, maxHaul:11, runPerMile:35, wear:1.15, topSpeed:90,
+   blurb:"Britain's newest main-line steam locomotive — built 2008.",
+   liveries:[{name:"BR Express Blue",colour:"#14396b",draw:0.04},{name:"LNER Apple Green",colour:"#2e7d32",draw:0.05},{name:"BR Brunswick Green",colour:"#14512e",draw:0.02}]},
+  {key:"duchess", name:"LMS 'Princess Coronation'", number:"46233", cost:172000, draw:1.75, reliability:0.71, maxHaul:12, runPerMile:37, wear:1.30, topSpeed:90,
+   blurb:"The mighty Stanier Pacific — 'Duchess of Sutherland'.",
+   liveries:[{name:"LMS Crimson Lake",colour:"#6e1f24",draw:0.05},{name:"BR Brunswick Green",colour:"#14512e",draw:0},{name:"Caledonian Blue (Streamliner)",colour:"#14396b",draw:0.06}]},
+  {key:"scot", name:"LNER Class A3 'Flying Scotsman'", number:"60103", cost:185000, draw:1.95, reliability:0.69, maxHaul:11, runPerMile:38, wear:1.35, topSpeed:90,
+   blurb:"The world's most famous locomotive. Vast crowds — and vast upkeep.",
+   liveries:[{name:"LNER Apple Green",colour:"#2e7d32",draw:0.05},{name:"BR Brunswick Green",colour:"#14512e",draw:0.02},{name:"BR Express Blue",colour:"#14396b",draw:0.03},{name:"Wartime Black",colour:"#141414",draw:0}]}
+];
+const CATALOG_DIESEL = [
+  {key:"c20", name:"Class 20 pair", number:"20142+20189", cost:31000, draw:1.06, reliability:0.9, maxHaul:11, runPerMile:19, wear:0.85, topSpeed:75,
+   blurb:"'Choppers' working nose-to-nose. Cheap, cheerful, characterful.",
+   liveries:[{name:"BR Rail Blue",colour:"#1e4c86",draw:0},{name:"BR Green",colour:"#14512e",draw:0.03},{name:"DRS Compass Blue",colour:"#0b3f6e",draw:0.02}]},
+  {key:"c33", name:"Class 33 'Crompton'", number:"33012", cost:44000, draw:1.14, reliability:0.90, maxHaul:10, runPerMile:20, wear:0.8, topSpeed:85,
+   blurb:"The Southern's compact Crompton — go-anywhere reliability.",
+   liveries:[{name:"BR Rail Blue",colour:"#1e4c86",draw:0},{name:"BR Green",colour:"#14512e",draw:0.03},{name:"Dutch (Grey & Yellow)",colour:"#6a7480",draw:0.02}]},
+  {key:"c37", name:"Class 37", number:"37417", cost:46000, draw:1.16, reliability:0.92, maxHaul:11, runPerMile:21, wear:0.8, topSpeed:80,
+   blurb:"The English Electric 'Tractor' — bulletproof and beloved.",
+   liveries:[{name:"BR Rail Blue",colour:"#1e4c86",draw:0},{name:"BR Green",colour:"#14512e",draw:0.03},{name:"Large Logo Blue",colour:"#1e4c86",draw:0.02},{name:"EWS Maroon & Gold",colour:"#6e1f24",draw:0.03}]},
+  {key:"c47", name:"Class 47", number:"47790", cost:55000, draw:1.1, reliability:0.9, maxHaul:12, runPerMile:22, wear:0.85, topSpeed:95,
+   blurb:"The BR maid-of-all-work diesel. Goes anywhere, does anything.",
+   liveries:[{name:"BR Rail Blue",colour:"#1e4c86",draw:0},{name:"BR Two-Tone Green",colour:"#14512e",draw:0.03},{name:"InterCity Swallow",colour:"#2b3a55",draw:0.02},{name:"Large Logo Blue",colour:"#1e4c86",draw:0.02}]},
+  {key:"c40", name:"Class 40 'Whistler'", number:"40145", cost:62000, draw:1.27, reliability:0.84, maxHaul:11, runPerMile:24, wear:0.95, topSpeed:90,
+   blurb:"A one-tonne whistle and a nose-end that turns every head.",
+   liveries:[{name:"BR Rail Blue",colour:"#1e4c86",draw:0},{name:"BR Green",colour:"#14512e",draw:0.05},{name:"BR Blue (Disc Headcode)",colour:"#1e4c86",draw:0.02}]},
+  {key:"peak", name:"Class 45 'Peak'", number:"45108", cost:64000, draw:1.25, reliability:0.85, maxHaul:12, runPerMile:24, wear:0.95, topSpeed:90,
+   blurb:"Sulzer-engined Peak — the Midland Main Line workhorse.",
+   liveries:[{name:"BR Rail Blue",colour:"#1e4c86",draw:0},{name:"BR Two-Tone Green",colour:"#14512e",draw:0.04},{name:"BR Blue (Full Yellow Ends)",colour:"#1e4c86",draw:0.01}]},
+  {key:"c60", name:"Class 60", number:"60009", cost:70000, draw:1.18, reliability:0.88, maxHaul:14, runPerMile:23, wear:0.9, topSpeed:62,
+   blurb:"Brush 'Super Tug' — immense heavy-haul grunt, if slow.",
+   liveries:[{name:"EWS Maroon & Gold",colour:"#6e1f24",draw:0},{name:"Trainload Grey",colour:"#6a7480",draw:0.02},{name:"DB Schenker Red",colour:"#b31217",draw:0.02},{name:"Colas Rail",colour:"#e0a800",draw:0.03}]},
+  {key:"c50", name:"Class 50 'Hoover'", number:"50007", cost:78000, draw:1.30, reliability:0.83, maxHaul:11, runPerMile:25, wear:0.95, topSpeed:100,
+   blurb:"English Electric power — the 'Hoovers' of the WR expresses.",
+   liveries:[{name:"BR Large Logo Blue",colour:"#1e4c86",draw:0},{name:"GWR Brunswick Green",colour:"#0f5132",draw:0.05},{name:"BR Rail Blue",colour:"#1e4c86",draw:0.01},{name:"Network SouthEast",colour:"#d1332e",draw:0.03}]},
+  {key:"c55", name:"Class 55 'Deltic'", number:"55019", cost:98000, draw:1.46, reliability:0.8, maxHaul:11, runPerMile:29, wear:1.0, topSpeed:100,
+   blurb:"Twin Napier engines howling — thirsty, fast, unmistakable.",
+   liveries:[{name:"BR Rail Blue",colour:"#1e4c86",draw:0},{name:"BR Two-Tone Green",colour:"#14512e",draw:0.05},{name:"Napier Blue (DP1 style)",colour:"#0b2e6e",draw:0.04}]},
+  {key:"c52", name:"Class 52 'Western'", number:"D1015", cost:105000, draw:1.50, reliability:0.78, maxHaul:11, runPerMile:30, wear:1.05, topSpeed:90,
+   blurb:"Diesel-hydraulic thunder — 'Western Champion', the enthusiasts' pin-up.",
+   liveries:[{name:"Maroon (Western Champion)",colour:"#6e1f24",draw:0.05},{name:"BR Rail Blue",colour:"#1e4c86",draw:0},{name:"Desert Sand",colour:"#c2a869",draw:0.04},{name:"Golden Ochre",colour:"#b8860b",draw:0.03}]},
+  {key:"hst", name:"HST (2× Class 43)", number:"43048+43089", cost:142000, draw:1.32, reliability:0.88, maxHaul:14, runPerMile:27, wear:0.9, topSpeed:125,
+   blurb:"Power cars top-and-tail. High capacity and genuinely fast.",
+   liveries:[{name:"InterCity Swallow",colour:"#2b3a55",draw:0},{name:"BR Blue & Grey",colour:"#6a7480",draw:0.02},{name:"GWR Green (Castle set)",colour:"#0f5132",draw:0.03},{name:"Large Logo Blue",colour:"#1e4c86",draw:0.02}]}
+];
+const CATALOG_RAKE = [
+  {key:"mk1",  name:"BR Mk1 rake", cars:8, capacity:520, comfort:1.0, cost:24000, upkeep:1200,
+   blurb:"Chocolate-and-cream heritage coaches. The railtour standard."},
+  {key:"mk2",  name:"Mk2 air-con rake", cars:9, capacity:600, comfort:1.15, cost:41000, upkeep:1600,
+   blurb:"Smooth, quiet, air-conditioned. Passengers pay a little more."},
+  {key:"mk3",  name:"Mk3 rake", cars:10, capacity:720, comfort:1.2, cost:60000, upkeep:1900,
+   blurb:"Long, fast, high-capacity stock — maximise the fares."},
+  {key:"pull", name:"Pullman umber & cream set", cars:6, capacity:300, comfort:1.65, cost:82000, upkeep:2600,
+   blurb:"First-class dining luxury. Fewer seats, premium tickets."}
+];
+const ROUTES = [
+  {key:"sc",  name:"Settle & Carlisle 'Long Drag'", miles:113, scenic:1.5, baseDemand:520, baseFare:78, access:5200, difficulty:1.45, steamFavoured:true,
+   blurb:"Ribblehead viaduct and the climb to Ais Gill. Punishing gradients — power matters."},
+  {key:"jac", name:"West Highland — The Jacobite", miles:84, scenic:1.6, baseDemand:560, baseFare:82, access:4800, difficulty:1.3, steamFavoured:true,
+   blurb:"Fort William to Mallaig over Glenfinnan. The most scenic line in Britain."},
+  {key:"spa", name:"Scarborough Spa Express", miles:82, scenic:1.1, baseDemand:600, baseFare:58, access:3600, difficulty:1.05, steamFavoured:true,
+   blurb:"York to the coast — a classic, easy, well-loved steam outing."},
+  {key:"daw", name:"Dawlish Sea Wall", miles:120, scenic:1.4, baseDemand:540, baseFare:70, access:4600, difficulty:1.1, steamFavoured:false,
+   blurb:"The waves at Dawlish and Brunel's coast. Crowds line the sea wall."},
+  {key:"cum", name:"Cumbrian Coast Circular", miles:145, scenic:1.35, baseDemand:470, baseFare:72, access:5000, difficulty:1.2, steamFavoured:false,
+   blurb:"A long day round the Lakeland coast — miles rack up the fares and the wear."},
+  {key:"nwc", name:"North Wales Coast Express", miles:106, scenic:1.3, baseDemand:520, baseFare:66, access:4200, difficulty:1.15, steamFavoured:true,
+   blurb:"Chester to Holyhead past the castles and the Conwy estuary."},
+  {key:"tor", name:"Torbay Express", miles:98, scenic:1.25, baseDemand:560, baseFare:64, access:4000, difficulty:1.1, steamFavoured:true,
+   blurb:"Bristol to Kingswear along the English Riviera. A summer favourite."},
+  {key:"del", name:"Deltic Aberdeen Farewell", miles:170, scenic:1.15, baseDemand:500, baseFare:80, access:6000, difficulty:1.25, steamFavoured:false,
+   blurb:"A fast East Coast dash for the diesel enthusiasts — long and thirsty."}
+];
+
+const SEASONS = ["Spring","Summer","Autumn","Winter"];
+const SEASON_FACTOR = {Spring:1.0, Summer:1.28, Autumn:1.06, Winter:0.72};
+
+/* ============================ STATE ============================ */
+const SAVE_KEY = "uk_railtour_manager_v1";
+let state = null;
+let sel = {loco:null, rake:null, route:null};
+let uid = 1;
+
+function newGame(){
+  uid = 1;
+  const starterLoco = mkLoco(CATALOG_DIESEL.find(d=>d.key==="c37"), 0.7);
+  const starterRake = mkRake(CATALOG_RAKE.find(r=>r.key==="mk1"), 0.75);
+  state = {
+    cash: 120000,
+    rep: 45,
+    week: 1,
+    locos: [starterLoco],
+    rakes: [starterRake],
+    activeTours: [],
+    ledger: [],
+    won: false
+  };
+  logEntry("Company founded with £120,000, a preserved Class 37 and a Mk1 rake. Good luck!", 0);
+  save(); render();
+}
+function mkLoco(cat, cond){
+  return {id:uid++, cat:cat.key, kind: CATALOG_STEAM.includes(cat)?"steam":"diesel",
+          name:cat.name, number:cat.number, condition:cond, livery:0, busyUntil:0};
+}
+function mkRake(cat, cond){ return {id:uid++, cat:cat.key, name:cat.name, condition:cond, busyUntil:0}; }
+function catOf(kind, key){
+  if(kind==="rake") return CATALOG_RAKE.find(r=>r.key===key);
+  return [...CATALOG_STEAM,...CATALOG_DIESEL].find(l=>l.key===key);
+}
+
+function save(){ try{ localStorage.setItem(SAVE_KEY, JSON.stringify({state,uid})); }catch(e){} }
+function load(){
+  try{
+    const raw = localStorage.getItem(SAVE_KEY);
+    if(!raw) return false;
+    const d = JSON.parse(raw);
+    if(!d || !d.state) return false;
+    state = d.state; uid = d.uid || 1;
+    // migrate older saves that predate liveries / tour-duration locking / deferred outcomes
+    state.locos.forEach(l=>{ if(typeof l.livery!=="number") l.livery = 0; if(typeof l.busyUntil!=="number") l.busyUntil = 0; });
+    state.rakes.forEach(r=>{ if(typeof r.busyUntil!=="number") r.busyUntil = 0; });
+    if(!Array.isArray(state.activeTours)) state.activeTours = [];
+    return true;
+  }catch(e){ return false; }
+}
+
+/* ============================ HELPERS ============================ */
+const money = n => "£"+Math.round(n).toLocaleString("en-GB");
+function seasonName(){ return SEASONS[Math.floor((state.week-1)/6)%4]; }
+function isFestive(){ return seasonName()==="Winter" && ((state.week-1)%6)>=3; }
+function repFactor(){ return state.rep/100; }
+function repTier(){
+  const r=state.rep;
+  if(r>=140) return "Legendary"; if(r>=110) return "Prestige";
+  if(r>=80) return "Renowned"; if(r>=50) return "Established";
+  if(r>=25) return "Regional"; return "Fledgling";
+}
+function condColour(c){ return c>0.6?"var(--good)":c>0.3?"var(--warn)":"var(--danger)"; }
+function liveryOf(loco){
+  const cat = catOf("loco", loco.cat);
+  const i = (loco.livery!=null && cat.liveries[loco.livery]) ? loco.livery : 0;
+  return cat.liveries[i];
+}
+function locoDraw(loco){ return catOf("loco",loco.cat).draw + liveryOf(loco).draw; }
+function repaintCost(loco){ return Math.round(catOf("loco",loco.cat).cost*0.025) + 1500; }
+// how many weeks a route ties up its stock (tour + positioning & servicing turnaround)
+function routeWeeks(route){ return route.miles>130 ? 3 : route.miles>=90 ? 2 : 1; }
+function isBusy(item){ return (item.busyUntil||0) > state.week; }
+function weeksLeft(item){ return Math.max(0, (item.busyUntil||0) - state.week); }
+function sellValue(kind, item){
+  const cat = catOf(kind, item.cat);
+  return Math.round(cat.cost * (0.35 + 0.4*item.condition));
+}
+function netWorth(){
+  let w = state.cash;
+  state.locos.forEach(l=> w+=sellValue("loco",l));
+  state.rakes.forEach(r=> w+=sellValue("rake",r));
+  return w;
+}
+function logEntry(text, delta){
+  state.ledger.unshift({week:state.week, text, delta});
+  if(state.ledger.length>200) state.ledger.pop();
+}
+
+/* ============================ TOUR MATHS ============================ */
+function computeTour(loco, rake, route, roll){
+  const lcat = catOf("loco", loco.cat);
+  const rcat = catOf("rake", rake.cat);
+  const season = seasonName();
+  let sf = SEASON_FACTOR[season];
+  if(isFestive()) sf += 0.45; // Santa specials
+
+  // steam-favoured route bonus
+  const affinity = (route.steamFavoured && loco.kind==="steam") ? 1.15
+                 : (!route.steamFavoured && loco.kind==="diesel") ? 1.05 : 1.0;
+
+  // effective public draw includes the loco's current livery
+  const draw = locoDraw(loco);
+
+  // ticket price
+  const ticket = Math.round(
+    route.baseFare * rcat.comfort * (0.82 + 0.16*draw) * (0.85 + 0.30*repFactor())
+  );
+
+  // demand
+  let demand = route.baseDemand * draw * route.scenic * affinity * sf * (0.6 + 0.7*repFactor());
+  const rnd = roll ? (0.82 + roll()*0.34) : 1.0;
+  demand *= rnd;
+  const passengers = Math.min(rcat.capacity, Math.round(demand));
+  const loadFactor = passengers / rcat.capacity;
+  const revenue = passengers * ticket;
+
+  // overload
+  const extraCars = Math.max(0, rcat.cars - lcat.maxHaul);
+  const overloadCost = extraCars * 1900;
+
+  // costs
+  const fuel = lcat.runPerMile * route.miles;
+  const crew = loco.kind==="steam" ? 3800 : 2400;
+  const support = 900;
+  const insurance = 600;
+  const cost = fuel + crew + support + insurance + route.access + rcat.upkeep + overloadCost;
+
+  // breakdown probability
+  let pBreak = route.difficulty * (1.08 - loco.condition) / lcat.reliability * 0.34;
+  pBreak += extraCars * 0.045;
+  pBreak = Math.max(0.015, Math.min(0.6, pBreak));
+
+  // wear this tour
+  const wear = (route.miles/900) * lcat.wear * (loco.kind==="steam"?1.25:1.0) * (1+extraCars*0.12);
+
+  return {season, ticket, passengers, capacity:rcat.capacity, loadFactor, revenue,
+          fuel, crew, support, insurance, access:route.access, upkeep:rcat.upkeep,
+          overloadCost, extraCars, cost, pBreak, wear, affinity, netExpected: revenue-cost};
+}
+
+// Roll the tour's outcome NOW but DO NOT touch game state — the result stays
+// sealed until the tour returns (so a failure is only revealed on completion).
+function resolveTour(loco, rake, route){
+  let seed = (state.week*97 + loco.id*13 + rake.id*7 + route.miles) % 1000;
+  const rng = ()=>{ seed = (seed*1103515245 + 12345) & 0x7fffffff; return (seed>>8)/0x7fffff; };
+  const p = computeTour(loco, rake, route, rng);
+  const events = [];
+  let revenue = p.revenue, cost = p.cost, repDelta = 0, brokeDown = false;
+
+  // breakdown check
+  let locoCondDrop = p.wear;
+  if(rng() < p.pBreak){
+    brokeDown = true;
+    const repair = Math.round(catOf("loco",loco.cat).cost * (0.06 + rng()*0.09));
+    cost += repair;
+    const refund = Math.round(revenue * (0.4 + rng()*0.25));
+    revenue -= refund;
+    repDelta -= 9;
+    locoCondDrop += 0.12;
+    events.push({cls:"bad", text:`💥 <b>Failure at speed.</b> ${loco.number} failed en route — a rescue loco was summoned. `+
+      `Repairs cost ${money(repair)} and ${money(refund)} of fares were refunded. The enthusiast press are not kind.`});
+  } else {
+    // positive/flavour events
+    const e = rng();
+    if(e < 0.14){
+      const bonus = Math.round(revenue*0.12);
+      revenue += bonus;
+      events.push({cls:"good", text:`📸 <b>Lineside crowds.</b> Photographers packed every overbridge — on-train sales added ${money(bonus)}.`});
+      repDelta += 2;
+    } else if(e < 0.24){
+      const delay = Math.round(cost*0.08);
+      cost += delay;
+      events.push({cls:"", text:`⏱️ <b>Signal check.</b> A late-running service delayed the path; extra crew hours cost ${money(delay)}.`});
+    } else if(e < 0.32 && p.loadFactor>0.85){
+      events.push({cls:"good", text:`🎟️ <b>Sold out.</b> Every seat taken and a waiting list — word is spreading.`});
+      repDelta += 3;
+    }
+  }
+
+  // reputation from load & quality
+  if(!brokeDown){
+    repDelta += 2;
+    if(p.loadFactor > 0.9) repDelta += 4;
+    else if(p.loadFactor > 0.7) repDelta += 2;
+    else if(p.loadFactor < 0.4) repDelta -= 3;
+    if(locoDraw(loco) >= 1.4 && route.scenic >= 1.3) repDelta += 2; // marquee pairing
+    if(catOf("rake",rake.cat).comfort >= 1.6) repDelta += 1;    // pullman polish
+  }
+
+  const net = revenue - cost;
+  // plain, serialisable outcome — held on the active-tour record until completion
+  return {routeKey:route.key, routeName:route.name, miles:route.miles, season:p.season,
+          locoId:loco.id, locoNumber:loco.number, locoCatKey:loco.cat, rakeId:rake.id, rakeCatKey:rake.cat,
+          passengers:p.passengers, capacity:p.capacity, ticket:p.ticket,
+          revenue, cost, net, repDelta, brokeDown, events, locoCondDrop, rakeCondDrop:p.wear*0.4};
+}
+
+// Apply a sealed outcome to game state — called only when the tour returns.
+function applyTourOutcome(o){
+  state.cash += o.net;
+  state.rep = Math.max(0, Math.min(160, state.rep + o.repDelta));
+  const loco = state.locos.find(l=>l.id===o.locoId);
+  const rake = state.rakes.find(r=>r.id===o.rakeId);
+  if(loco) loco.condition = Math.max(0.03, Math.min(1, loco.condition - o.locoCondDrop));
+  if(rake) rake.condition = Math.max(0.05, Math.min(1, rake.condition - o.rakeCondDrop));
+  logEntry(`${o.brokeDown?"⚠️ Returned (FAILED) from":"Completed"} '${o.routeName}' with ${o.locoNumber} + ${catOf("rake",o.rakeCatKey).name}: `+
+           `${o.passengers}/${o.capacity} seats @ ${money(o.ticket)}. Net ${o.net>=0?"+":""}${money(o.net)}.`, o.net);
+}
+
+/* ============================ RENDER ============================ */
+function render(){
+  document.getElementById("s-cash").textContent = money(state.cash);
+  document.getElementById("s-cash").style.color = state.cash<0 ? "#ff9d9d" : "#ffe9a8";
+  document.getElementById("s-rep").innerHTML = state.rep + " <span style='font-size:.6rem;opacity:.8'>"+repTier()+"</span>";
+  document.getElementById("s-fleet").textContent = state.locos.length+" / "+state.rakes.length;
+  document.getElementById("s-week").textContent = "Wk "+state.week;
+  document.getElementById("s-season").textContent = seasonName() + (isFestive()?" 🎄":"");
+
+  const out = state.locos.filter(isBusy).length + state.rakes.filter(isBusy).length;
+  const nextBack = [...state.locos, ...state.rakes].filter(isBusy).map(x=>x.busyUntil).sort((a,b)=>a-b)[0];
+  document.getElementById("ab-info").innerHTML =
+    `<b>Week ${state.week}</b> · ${seasonName()}${isFestive()?" 🎄":""} · `
+    + (out ? `${out} item${out>1?'s':''} out on tour${nextBack?` (next back week ${nextBack})`:''}` : `all stock available`);
+
+  const wb = document.getElementById("winBanner");
+  if(netWorth() >= 1000000 && !state.won){ state.won = true; save(); }
+  wb.innerHTML = state.won
+    ? `<div class="win-banner">🏆 Net worth ${money(netWorth())} — you've been named <b>Railtour Operator of the Year!</b> Keep building your empire.</div>`
+    : "";
+
+  renderDepot();
+  renderMarket();
+  renderRun();
+  renderWorks();
+  renderLedger();
+  save();
+}
+
+function renderDepot(){
+  const L = document.getElementById("depot-locos");
+  L.innerHTML = state.locos.length ? state.locos.map(l=>{
+    const c = catOf("loco",l.cat);
+    const lv = liveryOf(l);
+    const opts = c.liveries.map((x,i)=>`<option value="${i}" ${i===l.livery?'selected':''}>${x.name}${x.draw>0?` (+${x.draw.toFixed(2)} draw)`:''}</option>`).join("");
+    const busy = isBusy(l);
+    return `<div class="card">
+      <h3><span class="badge ${l.kind==='steam'?'b-steam':'b-diesel'}">${l.kind}</span>${l.number}</h3>
+      <p class="sub">${c.name}</p>
+      <div class="livery-line"><span class="swatch" style="background:${lv.colour}"></span><b>${lv.name}</b></div>
+      ${busy?`<div class="busy-tag">🚂 Out on tour — returns week ${l.busyUntil} (${weeksLeft(l)} wk)</div>`:''}
+      <div class="cond-lbl"><span>Condition</span><span>${Math.round(l.condition*100)}%</span></div>
+      <div class="bar"><i style="width:${l.condition*100}%;background:${condColour(l.condition)}"></i></div>
+      <ul class="specs">
+        <li><span>Public draw</span><span>${locoDraw(l).toFixed(2)}×${lv.draw>0?` <small style="color:var(--good)">(+${lv.draw.toFixed(2)})</small>`:''}</span></li>
+        <li><span>Reliability</span><span>${Math.round(c.reliability*100)}%</span></li>
+        <li><span>Max haul</span><span>${c.maxHaul} coaches</span></li>
+      </ul>
+      <label class="repaint">Repaint <span class="mini">(${money(repaintCost(l))})</span>
+        <select onchange="repaint(${l.id}, this.value)" ${busy?'disabled':''}>${opts}</select>
+      </label>
+      <button class="act small warnbtn" ${busy?'disabled':''} onclick="sellItem('loco',${l.id})">${busy?'Out on tour':`Sell · ${money(sellValue("loco",l))}`}</button>
+    </div>`;
+  }).join("") : `<div class="empty">No locomotives. Visit the Motive Power market.</div>`;
+
+  const R = document.getElementById("depot-rakes");
+  R.innerHTML = state.rakes.length ? state.rakes.map(r=>{
+    const c = catOf("rake",r.cat);
+    const busy = isBusy(r);
+    return `<div class="card">
+      <h3><span class="badge b-rake">rake</span>${c.name}</h3>
+      <p class="sub">${c.blurb}</p>
+      ${busy?`<div class="busy-tag">🚃 Out on tour — returns week ${r.busyUntil} (${weeksLeft(r)} wk)</div>`:''}
+      <div class="cond-lbl"><span>Condition</span><span>${Math.round(r.condition*100)}%</span></div>
+      <div class="bar"><i style="width:${r.condition*100}%;background:${condColour(r.condition)}"></i></div>
+      <ul class="specs">
+        <li><span>Capacity</span><span>${c.capacity} seats</span></li>
+        <li><span>Coaches</span><span>${c.cars}</span></li>
+        <li><span>Comfort</span><span>${c.comfort.toFixed(2)}×</span></li>
+      </ul>
+      <button class="act small warnbtn" ${busy?'disabled':''} onclick="sellItem('rake',${r.id})">${busy?'Out on tour':`Sell · ${money(sellValue("rake",r))}`}</button>
+    </div>`;
+  }).join("") : `<div class="empty">No carriage sets. Visit the Carriage market.</div>`;
+}
+
+function locoCard(c, isSteam){
+  return `<div class="card">
+    <h3><span class="badge ${isSteam?'b-steam':'b-diesel'}">${isSteam?'steam':'diesel'}</span>${c.name}</h3>
+    <p class="sub">${c.number} — ${c.blurb}</p>
+    <ul class="specs">
+      <li><span>Public draw</span><span>${c.draw.toFixed(2)}×</span></li>
+      <li><span>Reliability</span><span>${Math.round(c.reliability*100)}%</span></li>
+      <li><span>Max haul</span><span>${c.maxHaul} coaches</span></li>
+      <li><span>Running cost</span><span>${money(c.runPerMile)}/mi</span></li>
+      <li><span>Top speed</span><span>${c.topSpeed} mph</span></li>
+    </ul>
+    <div class="price">${money(c.cost)}</div>
+    <button class="act" ${state.cash<c.cost?'disabled':''} onclick="buyLoco('${c.key}')">
+      ${state.cash<c.cost?'Insufficient funds':'Purchase'}</button>
+  </div>`;
+}
+function renderMarket(){
+  document.getElementById("market-locos").innerHTML =
+    CATALOG_STEAM.map(c=>locoCard(c,true)).join("") +
+    CATALOG_DIESEL.map(c=>locoCard(c,false)).join("");
+  document.getElementById("market-rakes").innerHTML = CATALOG_RAKE.map(c=>`
+    <div class="card">
+      <h3><span class="badge b-rake">rake</span>${c.name}</h3>
+      <p class="sub">${c.blurb}</p>
+      <ul class="specs">
+        <li><span>Capacity</span><span>${c.capacity} seats</span></li>
+        <li><span>Coaches</span><span>${c.cars}</span></li>
+        <li><span>Comfort</span><span>${c.comfort.toFixed(2)}×</span></li>
+        <li><span>Upkeep / tour</span><span>${money(c.upkeep)}</span></li>
+      </ul>
+      <div class="price">${money(c.cost)}</div>
+      <button class="act" ${state.cash<c.cost?'disabled':''} onclick="buyRake('${c.key}')">
+        ${state.cash<c.cost?'Insufficient funds':'Purchase'}</button>
+    </div>`).join("");
+}
+
+function renderRun(){
+  // keep selections valid — drop anything sold or now out on tour
+  if(sel.loco){ const l=state.locos.find(x=>x.id===sel.loco); if(!l||isBusy(l)) sel.loco=null; }
+  if(sel.rake){ const r=state.rakes.find(x=>x.id===sel.rake); if(!r||isBusy(r)) sel.rake=null; }
+
+  document.getElementById("pick-loco").innerHTML = state.locos.length ? state.locos.map(l=>{
+    const c=catOf("loco",l.cat); const lv=liveryOf(l);
+    const busy=isBusy(l); const usable = l.condition>=0.15 && !busy;
+    const note = busy ? ` · 🚂 out on tour — returns wk ${l.busyUntil}` : (l.condition<0.15 ? ' · needs works' : '');
+    return `<div class="opt ${sel.loco===l.id?'sel':''} ${usable?'':'disabled'}"
+        ${usable?`onclick="pick('loco',${l.id})"`:''}>
+      <b><span class="swatch" style="background:${lv.colour}"></span>${l.number}</b>
+      <span class="mini">${c.name} · ${lv.name} · draw ${locoDraw(l).toFixed(2)}× · ${Math.round(l.condition*100)}% cond${note}</span>
+    </div>`;
+  }).join("") : `<div class="empty">Buy a loco first.</div>`;
+
+  document.getElementById("pick-rake").innerHTML = state.rakes.length ? state.rakes.map(r=>{
+    const c=catOf("rake",r.cat);
+    const busy=isBusy(r); const usable = r.condition>=0.1 && !busy;
+    const note = busy ? ` · out on tour — returns wk ${r.busyUntil}` : (r.condition<0.1 ? ' · needs works' : '');
+    return `<div class="opt ${sel.rake===r.id?'sel':''} ${usable?'':'disabled'}"
+        ${usable?`onclick="pick('rake',${r.id})"`:''}>
+      <b>${c.name}</b>
+      <span class="mini">${c.capacity} seats · ${c.cars} coaches · ${Math.round(r.condition*100)}% cond${note}</span>
+    </div>`;
+  }).join("") : `<div class="empty">Buy a rake first.</div>`;
+
+  document.getElementById("pick-route").innerHTML = ROUTES.map(rt=>`
+    <div class="opt ${sel.route===rt.key?'sel':''}" onclick="pick('route','${rt.key}')">
+      <b>${rt.name} ${rt.steamFavoured?'🚂':''}</b>
+      <span class="mini">${rt.miles} mi · scenic ${rt.scenic.toFixed(2)}× · access ${money(rt.access)}<br>${rt.blurb}</span>
+    </div>`).join("");
+
+  renderProjection();
+}
+
+function renderProjection(){
+  const box = document.getElementById("projection");
+  const loco = state.locos.find(l=>l.id===sel.loco);
+  const rake = state.rakes.find(r=>r.id===sel.rake);
+  const route = ROUTES.find(r=>r.key===sel.route);
+  if(!loco || !rake || !route){
+    box.innerHTML = `<div class="projection"><p class="sub">Select a locomotive, a carriage set and a route to see the projection.</p></div>`;
+    return;
+  }
+  const p = computeTour(loco, rake, route, null);
+  const riskCls = p.pBreak<0.12?"risk-lo":p.pBreak<0.28?"risk-md":"risk-hi";
+  const riskWord = p.pBreak<0.12?"Low":p.pBreak<0.28?"Moderate":"High";
+  const overloadNote = p.extraCars>0
+    ? `<div class="event bad">⚠️ Overloaded: this rake has ${p.extraCars} coach(es) beyond ${catOf("loco",loco.cat).name}'s comfortable haul. Expect an assisting-loco charge of ${money(p.overloadCost)} and a higher failure risk.</div>`
+    : "";
+  const affNote = p.affinity>1.05
+    ? `<div class="event good">✓ Enthusiast favourite: this pairing suits the route — crowds up.</div>` : "";
+  box.innerHTML = `<div class="projection">
+    <h3 style="margin-top:0">Projected: ${route.name}</h3>
+    ${affNote}${overloadNote}
+    <div class="proj-grid">
+      <div class="proj-cell"><b>${money(p.ticket)}</b><span>Ticket</span></div>
+      <div class="proj-cell"><b>${p.passengers}/${p.capacity}</b><span>Seats (${Math.round(p.loadFactor*100)}%)</span></div>
+      <div class="proj-cell"><b>${money(p.revenue)}</b><span>Revenue</span></div>
+      <div class="proj-cell"><b>${money(p.cost)}</b><span>Costs</span></div>
+      <div class="proj-cell"><b class="${p.netExpected>=0?'pos':'neg'}">${p.netExpected>=0?'+':''}${money(p.netExpected)}</b><span>Est. profit</span></div>
+      <div class="proj-cell"><b class="${riskCls}">${riskWord}</b><span>Failure risk</span></div>
+    </div>
+    <p class="sub">Cost breakdown: fuel/coal ${money(p.fuel)} · crew ${money(p.crew)} · support ${money(p.support)} · track access ${money(p.access)} · rake upkeep ${money(p.upkeep)} · insurance ${money(p.insurance)}${p.overloadCost?` · assist ${money(p.overloadCost)}`:''}. Season: ${p.season}${isFestive()?' (festive boost)':''}.</p>
+    <div class="event">🚂 These are <b>projections</b>. Dispatching ties up the loco and carriage set for <b>${routeWeeks(route)} week${routeWeeks(route)>1?'s':''}</b> (returns week ${state.week + routeWeeks(route)}) — and you'll only learn how it actually went, including any failure, once the train is back.</div>
+    <button class="act" onclick="departTour()">🚦 Dispatch this railtour</button>
+  </div>`;
+}
+
+function renderWorks(){
+  const box = document.getElementById("works-list");
+  const items = [];
+  state.locos.forEach(l=>{
+    const cat=catOf("loco",l.cat);
+    const full = Math.round(cat.cost*0.5*(1-l.condition)+400);
+    const svc = Math.round(cat.cost*0.22*(0.8-l.condition>0?0.8-l.condition:0.15)+250);
+    const busy = isBusy(l);
+    items.push(`<div class="card">
+      <h3><span class="badge ${l.kind==='steam'?'b-steam':'b-diesel'}">${l.kind}</span>${l.number}</h3>
+      <p class="sub">${cat.name}</p>
+      ${busy?`<div class="busy-tag">🚂 Out on tour — returns week ${l.busyUntil}</div>`:''}
+      <div class="cond-lbl"><span>Condition</span><span>${Math.round(l.condition*100)}%</span></div>
+      <div class="bar"><i style="width:${l.condition*100}%;background:${condColour(l.condition)}"></i></div>
+      <button class="act small" ${busy||l.condition>=0.99||state.cash<svc?'disabled':''} onclick="service('loco',${l.id})">Service to 80% · ${money(svc)}</button>
+      <button class="act small warnbtn" ${busy||l.condition>=0.99||state.cash<full?'disabled':''} onclick="overhaul('loco',${l.id})">Full overhaul · ${money(full)}</button>
+    </div>`);
+  });
+  state.rakes.forEach(r=>{
+    const cat=catOf("rake",r.cat);
+    const full = Math.round(cat.cost*0.45*(1-r.condition)+300);
+    const busy = isBusy(r);
+    items.push(`<div class="card">
+      <h3><span class="badge b-rake">rake</span>${cat.name}</h3>
+      ${busy?`<div class="busy-tag">🚃 Out on tour — returns week ${r.busyUntil}</div>`:''}
+      <div class="cond-lbl"><span>Condition</span><span>${Math.round(r.condition*100)}%</span></div>
+      <div class="bar"><i style="width:${r.condition*100}%;background:${condColour(r.condition)}"></i></div>
+      <button class="act small warnbtn" ${busy||r.condition>=0.99||state.cash<full?'disabled':''} onclick="overhaul('rake',${r.id})">Refurbish to as-new · ${money(full)}</button>
+    </div>`);
+  });
+  box.innerHTML = items.length?items.join(""):`<div class="empty">Nothing in the fleet yet.</div>`;
+}
+
+function renderLedger(){
+  document.getElementById("ledger-body").innerHTML = state.ledger.map(e=>`
+    <tr><td>Wk ${e.week} — ${e.text}</td>
+    <td class="${e.delta>0?'pos':e.delta<0?'neg':''}">${e.delta?((e.delta>0?'+':'')+money(e.delta)):''}</td></tr>`).join("");
+}
+
+/* ============================ ACTIONS ============================ */
+function buyLoco(key){
+  const c = catOf("loco",key); if(state.cash<c.cost) return;
+  state.cash -= c.cost;
+  state.locos.push(mkLoco(c, 1.0));
+  logEntry(`Purchased ${c.name} (${c.number}).`, -c.cost);
+  render();
+}
+function buyRake(key){
+  const c = catOf("rake",key); if(state.cash<c.cost) return;
+  state.cash -= c.cost;
+  state.rakes.push(mkRake(c, 1.0));
+  logEntry(`Purchased ${c.name}.`, -c.cost);
+  render();
+}
+function sellItem(kind,id){
+  const arr = kind==="loco"?state.locos:state.rakes;
+  const i = arr.findIndex(x=>x.id===id); if(i<0) return;
+  const item = arr[i]; const v = sellValue(kind,item);
+  if(!confirm(`Sell ${item.number||catOf(kind,item.cat).name} for ${money(v)}?`)) return;
+  state.cash += v; arr.splice(i,1);
+  logEntry(`Sold ${item.number||catOf(kind,item.cat).name}.`, v);
+  render();
+}
+function repaint(id, idx){
+  const loco = state.locos.find(l=>l.id===id); if(!loco) return;
+  idx = parseInt(idx,10);
+  if(idx===loco.livery){ render(); return; }
+  const cat = catOf("loco",loco.cat);
+  const fee = repaintCost(loco);
+  if(state.cash < fee){ alert("Not enough cash to repaint."); render(); return; }
+  if(!confirm(`Repaint ${loco.number} into ${cat.liveries[idx].name} for ${money(fee)}?`)){ render(); return; }
+  state.cash -= fee; loco.livery = idx;
+  logEntry(`Repainted ${loco.number} into ${cat.liveries[idx].name}.`, -fee);
+  render();
+}
+function service(kind,id){
+  const item = (kind==="loco"?state.locos:state.rakes).find(x=>x.id===id); if(!item) return;
+  const cat=catOf(kind,item.cat);
+  const cost = Math.round(cat.cost*0.22*(0.8-item.condition>0?0.8-item.condition:0.15)+250);
+  if(state.cash<cost) return;
+  state.cash -= cost; item.condition = Math.max(item.condition, 0.8);
+  logEntry(`Serviced ${item.number||cat.name} to 80%.`, -cost);
+  render();
+}
+function overhaul(kind,id){
+  const item = (kind==="loco"?state.locos:state.rakes).find(x=>x.id===id); if(!item) return;
+  const cat=catOf(kind,item.cat);
+  const cost = Math.round(cat.cost*(kind==="loco"?0.5:0.45)*(1-item.condition)+(kind==="loco"?400:300));
+  if(state.cash<cost) return;
+  state.cash -= cost; item.condition = 1.0;
+  logEntry(`Full overhaul of ${item.number||cat.name}.`, -cost);
+  render();
+}
+
+function pick(what,id){
+  sel[what] = (what==="route") ? id : parseInt(id,10);
+  renderRun();
+}
+
+function departTour(){
+  const loco = state.locos.find(l=>l.id===sel.loco);
+  const rake = state.rakes.find(r=>r.id===sel.rake);
+  const route = ROUTES.find(r=>r.key===sel.route);
+  if(!loco||!rake||!route) return;
+  if(isBusy(loco)||isBusy(rake)) return; // safety: can't dispatch stock already out
+  const dur = routeWeeks(route);
+  const returnsWeek = state.week + dur;
+  // roll the outcome now but keep it sealed until the tour returns
+  const outcome = resolveTour(loco, rake, route);
+  state.activeTours.push({returnsWeek, dur, outcome});
+  loco.busyUntil = returnsWeek;
+  rake.busyUntil = returnsWeek;
+  sel.loco = null; sel.rake = null; // both are now out on the road
+  logEntry(`Dispatched ${loco.number} + ${catOf("rake",rake.cat).name} on '${route.name}' — due back week ${returnsWeek}.`, 0);
+  openModal("Railtour Dispatched", `
+    <p><b>${route.name}</b> · ${route.miles} miles · ${seasonName()}</p>
+    <p>${loco.number} <span class="sub" style="font-style:normal">(${catOf("loco",loco.cat).name})</span> and the ${catOf("rake",rake.cat).name} have set off.</p>
+    <div class="event">🚂 The train is on the road. It's due back in <b>week ${returnsWeek}</b> (${dur} week${dur>1?'s':''}) — you'll find out how the tour went, good or bad, when it returns. Press <b>Advance One Week</b> to pass the time.</div>`);
+  render();
+}
+
+function advanceWeek(){
+  state.week++;
+  // any tours that have now returned resolve and report — this is where a failure surfaces
+  const returned = state.activeTours.filter(t=>t.returnsWeek<=state.week);
+  state.activeTours = state.activeTours.filter(t=>t.returnsWeek>state.week);
+  returned.forEach(t=>applyTourOutcome(t.outcome));
+  render();
+  if(returned.length) showCompletedReports(returned.map(t=>t.outcome));
+  checkBankruptcy();
+}
+
+function checkBankruptcy(){
+  if(state.cash < 0){
+    // give a chance if they can sell; only bust if net worth also negative
+    if(netWorth() < 0){
+      openModal("Receivership", `<p>Your balance is ${money(state.cash)} and there are no assets left to realise. The company has gone into receivership.</p>
+        <p>You reached <b>Week ${state.week}</b> with a reputation of <b>${state.rep}</b> (${repTier()}).</p>
+        <button class="act warnbtn" onclick="closeModal();newGame();">Start a new company</button>`, true);
+    }
+  }
+}
+
+/* ============================ REPORT MODAL ============================ */
+// One returned tour's outcome, rendered as a report section.
+function outcomeSection(o){
+  const loco = state.locos.find(l=>l.id===o.locoId);
+  const cond = loco ? Math.round(loco.condition*100)+"%" : "—";
+  const evHtml = o.events.length ? o.events.map(e=>`<div class="event ${e.cls}">${e.text}</div>`).join("") : "";
+  return `
+    <div class="report-block ${o.brokeDown?'failed':''}">
+      <p><b>${o.routeName}</b> · ${o.miles} miles · ${o.season}${o.brokeDown?` · <span class="neg">FAILED</span>`:''}</p>
+      <p>${o.locoNumber} <span class="sub" style="font-style:normal">(${catOf("loco",o.locoCatKey).name})</span> hauling the ${catOf("rake",o.rakeCatKey).name}.</p>
+      ${evHtml}
+      <div class="proj-grid">
+        <div class="proj-cell"><b>${o.passengers}/${o.capacity}</b><span>Seats sold</span></div>
+        <div class="proj-cell"><b>${money(o.revenue)}</b><span>Revenue</span></div>
+        <div class="proj-cell"><b>${money(o.cost)}</b><span>Costs</span></div>
+        <div class="proj-cell"><b class="${o.net>=0?'pos':'neg'}">${o.net>=0?'+':''}${money(o.net)}</b><span>Net result</span></div>
+        <div class="proj-cell"><b class="${o.repDelta>=0?'pos':'neg'}">${o.repDelta>=0?'+':''}${o.repDelta}</b><span>Reputation</span></div>
+        <div class="proj-cell"><b>${cond}</b><span>Loco condition</span></div>
+      </div>
+    </div>`;
+}
+function showCompletedReports(outcomes){
+  const head = outcomes.length>1
+    ? `${outcomes.length} Railtours Returned — Week ${state.week}`
+    : (outcomes[0].brokeDown ? `Railtour Returned — Failure — Week ${state.week}` : `Railtour Returned — Week ${state.week}`);
+  const body = outcomes.map(outcomeSection).join(`<hr style="border:none;border-top:1px solid var(--line);margin:14px 0">`)
+    + `<p class="sub">Balance now ${money(state.cash)} · reputation ${state.rep} (${repTier()}) · net worth ${money(netWorth())}.</p>`;
+  openModal(head, body);
+}
+
+/* ============================ MODAL / TABS / BOOT ============================ */
+function openModal(head, body, noClose){
+  document.getElementById("modalHead").textContent = head;
+  document.getElementById("modalBody").innerHTML = body;
+  document.getElementById("modalClose").style.display = noClose?"none":"block";
+  document.getElementById("modalBg").classList.add("show");
+}
+function closeModal(){ document.getElementById("modalBg").classList.remove("show"); }
+
+document.getElementById("modalClose").onclick = closeModal;
+document.getElementById("modalBg").addEventListener("click", e=>{ if(e.target.id==="modalBg") closeModal(); });
+document.getElementById("btn-advance").onclick = advanceWeek;
+
+document.querySelectorAll(".tabs button").forEach(b=>{
+  b.onclick = ()=>{
+    document.querySelectorAll(".tabs button").forEach(x=>x.classList.remove("active"));
+    document.querySelectorAll(".view").forEach(x=>x.classList.remove("active"));
+    b.classList.add("active");
+    document.getElementById("v-"+b.dataset.tab).classList.add("active");
+  };
+});
+document.getElementById("btn-newgame").onclick = ()=>{
+  if(confirm("Abandon your current company and start fresh?")){ newGame(); }
+};
+
+if(!load()){ newGame(); } else { render(); }
+</script>
+</body>
+</html>
