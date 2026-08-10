@@ -290,85 +290,61 @@
 const CATALOG_STEAM = [
   {key:"p-7", name:"B&O P-7 'President", number:"5300", cost:42000, draw:1.12, reliability:0.86, maxHaul:12, runPerMile:24, wear:1.05, topSpeed:75,
    blurb:"The express stars, named after U. S. presidents.",
-   liveries:[{name:"B&O Black",colour:"#1c1c1c",draw:0},{name:"B&O Olive",colour:"#4F6841",draw:0.04},
-  {key:"9f", name:"BR Standard 9F", number:"92214", cost:56000, draw:1.05, reliability:0.83, maxHaul:13, runPerMile:31, wear:1.15, topSpeed:60,
-   blurb:"A brute of a freight engine — hauls anything up any bank.",
-   liveries:[{name:"BR Black",colour:"#1c1c1c",draw:0},{name:"BR Green (Evening Star)",colour:"#0f5132",draw:0.06},{name:"Weathered Freight Black",colour:"#171717",draw:0.01}]},
-  {key:"castle", name:"GWR 'Castle' Class", number:"5043", cost:74000, draw:1.28, reliability:0.81, maxHaul:10, runPerMile:29, wear:1.1, topSpeed:80,
-   blurb:"Copper-capped Great Western elegance with a real turn of speed.",
-   liveries:[{name:"GWR Brunswick Green",colour:"#0f5132",draw:0.03},{name:"BR Brunswick Green",colour:"#14512e",draw:0},{name:"GWR Wartime Black",colour:"#141414",draw:0.01}]},
-  {key:"britannia", name:"BR Standard 7 'Britannia'", number:"70000", cost:92000, draw:1.35, reliability:0.80, maxHaul:11, runPerMile:30, wear:1.15, topSpeed:90,
-   blurb:"The first BR Standard Pacific — a modern mixed-traffic classic.",
-   liveries:[{name:"BR Brunswick Green",colour:"#14512e",draw:0},{name:"BR Lined Black",colour:"#1c1c1c",draw:0.01},{name:"BR Express Blue",colour:"#14396b",draw:0.03}]},
-  {key:"a4", name:"LNER Class A4", number:"60007", cost:124000, draw:1.55, reliability:0.76, maxHaul:11, runPerMile:34, wear:1.2, topSpeed:90,
-   blurb:"Streamlined Gresley thoroughbred — 'Sir Nigel Gresley' herself.",
-   liveries:[{name:"LNER Garter Blue",colour:"#14396b",draw:0.06},{name:"BR Brunswick Green",colour:"#14512e",draw:0.02},{name:"Silver Grey (Silver Jubilee)",colour:"#b9c0c7",draw:0.05},{name:"LNER Wartime Black",colour:"#141414",draw:0}]},
-  {key:"king", name:"GWR 'King' Class", number:"6023", cost:150000, draw:1.60, reliability:0.74, maxHaul:11, runPerMile:34, wear:1.25, topSpeed:88,
-   blurb:"The Great Western's heavyweight champion — 'King Edward II'.",
-   liveries:[{name:"GWR Brunswick Green",colour:"#0f5132",draw:0.04},{name:"BR Brunswick Green",colour:"#14512e",draw:0},{name:"GWR Wartime Black",colour:"#141414",draw:0.01}]},
-  {key:"mn", name:"SR 'Merchant Navy' Class", number:"35028", cost:158000, draw:1.70, reliability:0.72, maxHaul:12, runPerMile:36, wear:1.30, topSpeed:90,
-   blurb:"Bulleid's air-smoothed Pacific — 'Clan Line' in full cry.",
-   liveries:[{name:"BR Brunswick Green",colour:"#14512e",draw:0},{name:"Southern Malachite Green",colour:"#1f7a44",draw:0.06},{name:"BR Express Blue",colour:"#14396b",draw:0.03}]},
-  {key:"tornado", name:"LNER Peppercorn A1 'Tornado'", number:"60163", cost:168000, draw:1.80, reliability:0.82, maxHaul:11, runPerMile:35, wear:1.15, topSpeed:90,
-   blurb:"Britain's newest main-line steam locomotive — built 2008.",
-   liveries:[{name:"BR Express Blue",colour:"#14396b",draw:0.04},{name:"LNER Apple Green",colour:"#2e7d32",draw:0.05},{name:"BR Brunswick Green",colour:"#14512e",draw:0.02}]},
-  {key:"duchess", name:"LMS 'Princess Coronation'", number:"46233", cost:172000, draw:1.75, reliability:0.71, maxHaul:12, runPerMile:37, wear:1.30, topSpeed:90,
-   blurb:"The mighty Stanier Pacific — 'Duchess of Sutherland'.",
-   liveries:[{name:"LMS Crimson Lake",colour:"#6e1f24",draw:0.05},{name:"BR Brunswick Green",colour:"#14512e",draw:0},{name:"Caledonian Blue (Streamliner)",colour:"#14396b",draw:0.06}]},
+   liveries:[{name:"B&O Black",colour:"#1c1c1c",draw:0},{name:"B&O Olive",colour:"#4F6841",draw:0.04}]},
+  {key:"g1sa", name:"Reading G1sa", number:"115", cost:56000, draw:1.05, reliability:0.83, maxHaul:13, runPerMile:31, wear:1.15, topSpeed:60,
+   blurb:"A brute of the Appalacians — hauls passenger trains like the Schuykill, Wall Street and more.",
+   liveries:[{name:"Reading Black",colour:"#1c1c1c",draw:0},
+  {key:"k4", name:"PRR K4", number:"1361", cost:74000, draw:1.28, reliability:0.81, maxHaul:10, runPerMile:29, wear:1.1, topSpeed:80,
+   blurb:"Pennsyvanian State elegance with a real turn of speed.",
+   liveries:[{name:"PRR Green",colour:"#1b3124",draw:0.03},{name:"PRR Tuscan Red",colour:"#7C3030",draw:0}]},
+  {key:"overland", name:"UP FTT-1 'Overlands'", number:"8800", cost:92000, draw:1.35, reliability:0.80, maxHaul:11, runPerMile:30, wear:1.15, topSpeed:90,
+   blurb:"The first 4-10-2 on the Union Pacific — a modern mixed-traffic classic.",
+   liveries:[{name:"UP Black",colour:"#1c1c1c",draw:0.01},]},
+  {key:"mt5", name:"SP MT-5", number:"4373", cost:124000, draw:1.55, reliability:0.76, maxHaul:11, runPerMile:34, wear:1.2, topSpeed:90,
+   blurb:"Streamlined Coastal thoroughbred for the Daylights.",
+   liveries:[{name:"SP Orange",colour:"#FF9639",draw:0.06},{name:"SP Black",colour:"#141414",draw:0}]},
+  {key:"s-2", name:"GNR S-2", number:"2584", cost:150000, draw:1.60, reliability:0.74, maxHaul:11, runPerMile:34, wear:1.25, topSpeed:88,
+   blurb:"The Great northern's heavyweight champion for the Empire Builder.",
+   liveries:[{name:"GN steam locomotive Green",colour:"#535233",draw:0.04},{name:"GNR Black",colour:"#141414",draw:0.01}]},
+  {key:"ps-4", name:"SOU PS-4", number:"1401", cost:158000, draw:1.70, reliability:0.72, maxHaul:12, runPerMile:36, wear:1.30, topSpeed:90,
+   blurb:"Southern's green Pacific — 'Charlotte' in full cry.",
+   liveries:[{name:"SOU Sylvan Green",colour:"#607B68",draw:0}]},
+  {key:"g3", name:"CNJ G3", number:"831", cost:168000, draw:1.80, reliability:0.82, maxHaul:11, runPerMile:35, wear:1.15, topSpeed:90,
+   blurb:"New Jersey's coastal lady in waiting — blue comet fame.",
+   liveries:[{name:"CNJ packard Blue",colour:"#1B365D",draw:0.04},{name:"CNJ Green",colour:"#358749",draw:0.05}]},
+  {key:"1200", name:"Santa fe 1200", number:"1200", cost:172000, draw:1.75, reliability:0.71, maxHaul:12, runPerMile:37, wear:1.30, topSpeed:90,
+   blurb:"The mighty Pacific — 'Santa Fe De-Luxe' fame.",
+   liveries:[{name:"black",colour:"#141414",draw:0.06}]},
   {key:"scot", name:"LNER Class A3 'Flying Scotsman'", number:"60103", cost:185000, draw:1.95, reliability:0.69, maxHaul:11, runPerMile:38, wear:1.35, topSpeed:90,
    blurb:"The world's most famous locomotive. Vast crowds — and vast upkeep.",
    liveries:[{name:"LNER Apple Green",colour:"#2e7d32",draw:0.05},{name:"BR Brunswick Green",colour:"#14512e",draw:0.02},{name:"BR Express Blue",colour:"#14396b",draw:0.03},{name:"Wartime Black",colour:"#141414",draw:0}]}
 ];
 const CATALOG_DIESEL = [
-  {key:"c20", name:"Class 20 pair", number:"20142+20189", cost:31000, draw:1.06, reliability:0.9, maxHaul:11, runPerMile:19, wear:0.85, topSpeed:75,
-   blurb:"'Choppers' working nose-to-nose. Cheap, cheerful, characterful.",
-   liveries:[{name:"BR Rail Blue",colour:"#1e4c86",draw:0},{name:"BR Green",colour:"#14512e",draw:0.03},{name:"DRS Compass Blue",colour:"#0b3f6e",draw:0.02}]},
-  {key:"c33", name:"Class 33 'Crompton'", number:"33012", cost:44000, draw:1.14, reliability:0.90, maxHaul:10, runPerMile:20, wear:0.8, topSpeed:85,
-   blurb:"The Southern's compact Crompton — go-anywhere reliability.",
-   liveries:[{name:"BR Rail Blue",colour:"#1e4c86",draw:0},{name:"BR Green",colour:"#14512e",draw:0.03},{name:"Dutch (Grey & Yellow)",colour:"#6a7480",draw:0.02}]},
-  {key:"c37", name:"Class 37", number:"37417", cost:46000, draw:1.16, reliability:0.92, maxHaul:11, runPerMile:21, wear:0.8, topSpeed:80,
-   blurb:"The English Electric 'Tractor' — bulletproof and beloved.",
-   liveries:[{name:"BR Rail Blue",colour:"#1e4c86",draw:0},{name:"BR Green",colour:"#14512e",draw:0.03},{name:"Large Logo Blue",colour:"#1e4c86",draw:0.02},{name:"EWS Maroon & Gold",colour:"#6e1f24",draw:0.03}]},
-  {key:"c47", name:"Class 47", number:"47790", cost:55000, draw:1.1, reliability:0.9, maxHaul:12, runPerMile:22, wear:0.85, topSpeed:95,
-   blurb:"The BR maid-of-all-work diesel. Goes anywhere, does anything.",
-   liveries:[{name:"BR Rail Blue",colour:"#1e4c86",draw:0},{name:"BR Two-Tone Green",colour:"#14512e",draw:0.03},{name:"InterCity Swallow",colour:"#2b3a55",draw:0.02},{name:"Large Logo Blue",colour:"#1e4c86",draw:0.02}]},
-  {key:"c40", name:"Class 40 'Whistler'", number:"40145", cost:62000, draw:1.27, reliability:0.84, maxHaul:11, runPerMile:24, wear:0.95, topSpeed:90,
-   blurb:"A one-tonne whistle and a nose-end that turns every head.",
-   liveries:[{name:"BR Rail Blue",colour:"#1e4c86",draw:0},{name:"BR Green",colour:"#14512e",draw:0.05},{name:"BR Blue (Disc Headcode)",colour:"#1e4c86",draw:0.02}]},
-  {key:"peak", name:"Class 45 'Peak'", number:"45108", cost:64000, draw:1.25, reliability:0.85, maxHaul:12, runPerMile:24, wear:0.95, topSpeed:90,
-   blurb:"Sulzer-engined Peak — the Midland Main Line workhorse.",
-   liveries:[{name:"BR Rail Blue",colour:"#1e4c86",draw:0},{name:"BR Two-Tone Green",colour:"#14512e",draw:0.04},{name:"BR Blue (Full Yellow Ends)",colour:"#1e4c86",draw:0.01}]},
-  {key:"c60", name:"Class 60", number:"60009", cost:70000, draw:1.18, reliability:0.88, maxHaul:14, runPerMile:23, wear:0.9, topSpeed:62,
-   blurb:"Brush 'Super Tug' — immense heavy-haul grunt, if slow.",
-   liveries:[{name:"EWS Maroon & Gold",colour:"#6e1f24",draw:0},{name:"Trainload Grey",colour:"#6a7480",draw:0.02},{name:"DB Schenker Red",colour:"#b31217",draw:0.02},{name:"Colas Rail",colour:"#e0a800",draw:0.03}]},
-  {key:"c50", name:"Class 50 'Hoover'", number:"50007", cost:78000, draw:1.30, reliability:0.83, maxHaul:11, runPerMile:25, wear:0.95, topSpeed:100,
-   blurb:"English Electric power — the 'Hoovers' of the WR expresses.",
-   liveries:[{name:"BR Large Logo Blue",colour:"#1e4c86",draw:0},{name:"GWR Brunswick Green",colour:"#0f5132",draw:0.05},{name:"BR Rail Blue",colour:"#1e4c86",draw:0.01},{name:"Network SouthEast",colour:"#d1332e",draw:0.03}]},
-  {key:"c55", name:"Class 55 'Deltic'", number:"55019", cost:98000, draw:1.46, reliability:0.8, maxHaul:11, runPerMile:29, wear:1.0, topSpeed:100,
-   blurb:"Twin Napier engines howling — thirsty, fast, unmistakable.",
-   liveries:[{name:"BR Rail Blue",colour:"#1e4c86",draw:0},{name:"BR Two-Tone Green",colour:"#14512e",draw:0.05},{name:"Napier Blue (DP1 style)",colour:"#0b2e6e",draw:0.04}]},
-  {key:"c52", name:"Class 52 'Western'", number:"D1015", cost:105000, draw:1.50, reliability:0.78, maxHaul:11, runPerMile:30, wear:1.05, topSpeed:90,
-   blurb:"Diesel-hydraulic thunder — 'Western Champion', the enthusiasts' pin-up.",
-   liveries:[{name:"Maroon (Western Champion)",colour:"#6e1f24",draw:0.05},{name:"BR Rail Blue",colour:"#1e4c86",draw:0},{name:"Desert Sand",colour:"#c2a869",draw:0.04},{name:"Golden Ochre",colour:"#b8860b",draw:0.03}]},
-  {key:"hst", name:"HST (2× Class 43)", number:"43048+43089", cost:142000, draw:1.32, reliability:0.88, maxHaul:14, runPerMile:27, wear:0.9, topSpeed:125,
-   blurb:"Power cars top-and-tail. High capacity and genuinely fast.",
-   liveries:[{name:"InterCity Swallow",colour:"#2b3a55",draw:0},{name:"BR Blue & Grey",colour:"#6a7480",draw:0.02},{name:"GWR Green (Castle set)",colour:"#0f5132",draw:0.03},{name:"Large Logo Blue",colour:"#1e4c86",draw:0.02}]}
+  {key:"f7", name:"EMD F7", number:"143L+143A+143B+143C", cost:31000, draw:1.06, reliability:0.9, maxHaul:11, runPerMile:19, wear:0.85, topSpeed:75,
+   blurb:"Santa Fe Mainline Power.",
+   liveries:[{name:"Warbonnet red",colour:"#C22424",draw:0}]},
+  {key:"gp7", name:"EMD GP7", number:"308", cost:44000, draw:1.14, reliability:0.90, maxHaul:10, runPerMile:20, wear:0.8, topSpeed:85,
+   blurb:"Versatile Road Switcher — go-anywhere reliability.",
+   liveries:[{name:"Grey",colour:"#6a7480",draw:0.02}]},
+  {key:"aero", name:"Aerotrain (LWT12 + coaches)", number:"2", cost:1420000, draw:1.32, reliability:0.88, maxHaul:14, runPerMile:27, wear:0.9, topSpeed:125,
+   blurb:"GM's 'Train of The Future', Plagued with problems.",
+   liveries:[{name:"aerotrain pinstripe",colour:"#D62828",draw:0}]}
 ];
 const CATALOG_RAKE = [
-  {key:"mk1",  name:"BR Mk1 rake", cars:8, capacity:520, comfort:1.0, cost:24000, upkeep:1200,
-   blurb:"Chocolate-and-cream heritage coaches. The railtour standard."},
-  {key:"mk2",  name:"Mk2 air-con rake", cars:9, capacity:600, comfort:1.15, cost:41000, upkeep:1600,
-   blurb:"Smooth, quiet, air-conditioned. Passengers pay a little more."},
-  {key:"mk3",  name:"Mk3 rake", cars:10, capacity:720, comfort:1.2, cost:60000, upkeep:1900,
-   blurb:"Long, fast, high-capacity stock — maximise the fares."},
-  {key:"pull", name:"Pullman umber & cream set", cars:6, capacity:300, comfort:1.65, cost:82000, upkeep:2600,
-   blurb:"First-class dining luxury. Fewer seats, premium tickets."}
+  {key:"pull",  name:"Pullman sets", cars:8, capacity:520, comfort:1.0, cost:24000, upkeep:1200,
+   blurb:"green heritage coaches. The railtour standard."},
+  {key:"budd",  name:"Budd sets", cars:9, capacity:600, comfort:1.15, cost:41000, upkeep:1600,
+   blurb:"Smooth, quiet, air-conditioned, streamlined. Passengers pay a little more."},
+  {key:diner",  name:"Diner cars", cars:10, capacity:720, comfort:1.2, cost:60000, upkeep:1900,
+   blurb:"Food on stock — maximise the fares."},
+  {key:"pullslep", name:"Pullman green sleeper set", cars:6, capacity:300, comfort:1.65, cost:82000, upkeep:2600,
+   blurb:"First-class sleeper luxury. Fewer seats, premium tickets."}
 ];
 const ROUTES = [
-  {key:"sc",  name:"Settle & Carlisle 'Long Drag'", miles:113, scenic:1.5, baseDemand:520, baseFare:78, access:5200, difficulty:1.45, steamFavoured:true,
-   blurb:"Ribblehead viaduct and the climb to Ais Gill. Punishing gradients — power matters."},
-  {key:"jac", name:"West Highland — The Jacobite", miles:84, scenic:1.6, baseDemand:560, baseFare:82, access:4800, difficulty:1.3, steamFavoured:true,
-   blurb:"Fort William to Mallaig over Glenfinnan. The most scenic line in Britain."},
+  {key:"sc",  name:"Northeast Corridor", miles:113, scenic:1.5, baseDemand:520, baseFare:78, access:5200, difficulty:1.45, steamFavoured:false,
+   blurb:"electrified mainline, the backbone."},
+  {key:"jac", name:"Empire Builder", miles:84, scenic:1.6, baseDemand:560, baseFare:82, access:4800, difficulty:1.3, steamFavoured:true,
+   blurb:"Chicago to Seattle, right under Canada."},
   {key:"spa", name:"Scarborough Spa Express", miles:82, scenic:1.1, baseDemand:600, baseFare:58, access:3600, difficulty:1.05, steamFavoured:true,
    blurb:"York to the coast — a classic, easy, well-loved steam outing."},
   {key:"daw", name:"Dawlish Sea Wall", miles:120, scenic:1.4, baseDemand:540, baseFare:70, access:4600, difficulty:1.1, steamFavoured:false,
@@ -387,7 +363,7 @@ const SEASONS = ["Spring","Summer","Autumn","Winter"];
 const SEASON_FACTOR = {Spring:1.0, Summer:1.28, Autumn:1.06, Winter:0.72};
 
 /* ============================ STATE ============================ */
-const SAVE_KEY = "uk_railtour_manager_v1";
+const SAVE_KEY = "american_railtour_manager_v1";
 let state = null;
 let sel = {loco:null, rake:null, route:null};
 let uid = 1;
@@ -406,7 +382,7 @@ function newGame(){
     ledger: [],
     won: false
   };
-  logEntry("Company founded with £120,000, a preserved Class 37 and a Mk1 rake. Good luck!", 0);
+  logEntry("Company founded with $120,000,000, a preserved Class 37 and a Mk1 rake. Good luck!", 0);
   save(); render();
 }
 function mkLoco(cat, cond){
@@ -436,7 +412,7 @@ function load(){
 }
 
 /* ============================ HELPERS ============================ */
-const money = n => "£"+Math.round(n).toLocaleString("en-GB");
+const money = n => "$"+Math.round(n).toLocaleString("en-GB");
 function seasonName(){ return SEASONS[Math.floor((state.week-1)/6)%4]; }
 function isFestive(){ return seasonName()==="Winter" && ((state.week-1)%6)>=3; }
 function repFactor(){ return state.rep/100; }
