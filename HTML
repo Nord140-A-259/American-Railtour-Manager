@@ -7,9 +7,7 @@
 <style>
   :root{
     --Pullman-Green:#303B1B;        /* Pullman Car Co. Green */
-    --br-blue-dk:#0c2740;
-    --lms-maroon:#6e1f24;     /* LMS crimson lake */
-    --gwr-green:#0f5132;
+    --b&o-blue-dk:#0c2740;
     --coach-cream:#f4ecd6;
     --warn:#e0a800;
     --danger:#a83232;
@@ -78,9 +76,9 @@
     font-size:.6rem;text-transform:uppercase;letter-spacing:.6px;padding:2px 7px;border-radius:20px;
     color:#fff;font-weight:700;vertical-align:middle;
   }
-  .b-steam{background:var(--lms-maroon)}
-  .b-diesel{background:var(--br-blue)}
-  .b-rake{background:var(--gwr-green)}
+  .b-steam{background:var(--prr-tuscan red)}
+  .b-diesel{background:var(--b&o-blue)}
+  .b-rake{background:var(--pullman-green)}
   .b-route{background:#7a4a12}
   .sub{color:#6a7480;font-size:.8rem;margin:0 0 8px;font-style:italic}
   .specs{list-style:none;padding:0;margin:8px 0;font-size:.82rem}
@@ -88,7 +86,7 @@
   .specs li span:last-child{font-weight:600}
   .price{font-size:1.1rem;font-weight:700;color:var(--lms-maroon)}
   button.act{
-    background:var(--br-blue);color:#fff;border:none;border-radius:6px;padding:9px 14px;
+    background:var(--b&o-blue);color:#fff;border:none;border-radius:6px;padding:9px 14px;
     cursor:pointer;font-weight:600;font-size:.85rem;width:100%;margin-top:6px;
   }
   button.act:hover{background:var(--br-blue-dk)}
@@ -113,8 +111,8 @@
     background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:9px 11px;cursor:pointer;
     margin-bottom:8px;font-size:.82rem;transition:.12s;
   }
-  .opt:hover{border-color:var(--br-blue)}
-  .opt.sel{border:2px solid var(--br-blue);background:#eef4fb}
+  .opt:hover{border-color:var(--b&o-blue)}
+  .opt.sel{border:2px solid var(--b&o-blue);background:#eef4fb}
   .opt.disabled{opacity:.45;cursor:not-allowed}
   .opt b{display:block}
   .opt .mini{color:#6a7480;font-size:.74rem}
@@ -141,7 +139,7 @@
     background:var(--coach-cream);border:3px solid var(--br-blue);border-radius:10px;max-width:560px;width:100%;
     max-height:90vh;overflow:auto;box-shadow:0 10px 40px rgba(0,0,0,.4);
   }
-  .modal .head{background:var(--br-blue);color:#fff;padding:12px 18px;font-weight:700;font-size:1.05rem}
+  .modal .head{background:var(--b&o-blue);color:#fff;padding:12px 18px;font-weight:700;font-size:1.05rem}
   .modal .body{padding:18px}
   .modal .body p{margin:.4rem 0;font-size:.9rem}
   .event{background:#fff;border-left:4px solid var(--warn);padding:8px 12px;margin:8px 0;font-size:.85rem;border-radius:0 6px 6px 0}
@@ -315,9 +313,6 @@ const CATALOG_STEAM = [
   {key:"1200", name:"Santa fe 1200", number:"1200", cost:172000, draw:1.75, reliability:0.71, maxHaul:12, runPerMile:37, wear:1.30, topSpeed:90,
    blurb:"The mighty Pacific — 'Santa Fe De-Luxe' fame.",
    liveries:[{name:"black",colour:"#141414",draw:0.06}]},
-  {key:"scot", name:"LNER Class A3 'Flying Scotsman'", number:"60103", cost:185000, draw:1.95, reliability:0.69, maxHaul:11, runPerMile:38, wear:1.35, topSpeed:90,
-   blurb:"The world's most famous locomotive. Vast crowds — and vast upkeep.",
-   liveries:[{name:"LNER Apple Green",colour:"#2e7d32",draw:0.05},{name:"BR Brunswick Green",colour:"#14512e",draw:0.02},{name:"BR Express Blue",colour:"#14396b",draw:0.03},{name:"Wartime Black",colour:"#141414",draw:0}]}
 ];
 const CATALOG_DIESEL = [
   {key:"f7", name:"EMD F7", number:"143L+143A+143B+143C", cost:31000, draw:1.06, reliability:0.9, maxHaul:11, runPerMile:19, wear:0.85, topSpeed:75,
@@ -327,7 +322,7 @@ const CATALOG_DIESEL = [
    blurb:"Versatile Road Switcher — go-anywhere reliability.",
    liveries:[{name:"Grey",colour:"#6a7480",draw:0.02}]},
   {key:"aero", name:"Aerotrain (LWT12 + coaches)", number:"2", cost:1420000, draw:1.32, reliability:0.88, maxHaul:14, runPerMile:27, wear:0.9, topSpeed:125,
-   blurb:"GM's 'Train of The Future', Plagued with problems.",
+   blurb:"GM's 'Train of The Future', Plagued with problems, and failed miserably.",
    liveries:[{name:"aerotrain pinstripe",colour:"#D62828",draw:0}]}
 ];
 const CATALOG_RAKE = [
@@ -341,22 +336,22 @@ const CATALOG_RAKE = [
    blurb:"First-class sleeper luxury. Fewer seats, premium tickets."}
 ];
 const ROUTES = [
-  {key:"sc",  name:"Northeast Corridor", miles:113, scenic:1.5, baseDemand:520, baseFare:78, access:5200, difficulty:1.45, steamFavoured:false,
+  {key:"NEC",  name:"Northeast Corridor", miles:113, scenic:1.5, baseDemand:520, baseFare:78, access:5200, difficulty:1.45, steamFavoured:false,
    blurb:"electrified mainline, the backbone."},
-  {key:"jac", name:"Empire Builder", miles:84, scenic:1.6, baseDemand:560, baseFare:82, access:4800, difficulty:1.3, steamFavoured:true,
+  {key:"EMP", name:"Empire Builder", miles:84, scenic:1.6, baseDemand:560, baseFare:82, access:4800, difficulty:1.3, steamFavoured:true,
    blurb:"Chicago to Seattle, right under Canada."},
-  {key:"spa", name:"Scarborough Spa Express", miles:82, scenic:1.1, baseDemand:600, baseFare:58, access:3600, difficulty:1.05, steamFavoured:true,
-   blurb:"York to the coast — a classic, easy, well-loved steam outing."},
-  {key:"daw", name:"Dawlish Sea Wall", miles:120, scenic:1.4, baseDemand:540, baseFare:70, access:4600, difficulty:1.1, steamFavoured:false,
-   blurb:"The waves at Dawlish and Brunel's coast. Crowds line the sea wall."},
-  {key:"cum", name:"Cumbrian Coast Circular", miles:145, scenic:1.35, baseDemand:470, baseFare:72, access:5000, difficulty:1.2, steamFavoured:false,
-   blurb:"A long day round the Lakeland coast — miles rack up the fares and the wear."},
-  {key:"nwc", name:"North Wales Coast Express", miles:106, scenic:1.3, baseDemand:520, baseFare:66, access:4200, difficulty:1.15, steamFavoured:true,
-   blurb:"Chester to Holyhead past the castles and the Conwy estuary."},
-  {key:"tor", name:"Torbay Express", miles:98, scenic:1.25, baseDemand:560, baseFare:64, access:4000, difficulty:1.1, steamFavoured:true,
-   blurb:"Bristol to Kingswear along the English Riviera. A summer favourite."},
-  {key:"del", name:"Deltic Aberdeen Farewell", miles:170, scenic:1.15, baseDemand:500, baseFare:80, access:6000, difficulty:1.25, steamFavoured:false,
-   blurb:"A fast East Coast dash for the diesel enthusiasts — long and thirsty."}
+  {key:"BLC", name:"blue comet", miles:82, scenic:1.1, baseDemand:600, baseFare:58, access:3600, difficulty:1.05, steamFavoured:true,
+   blurb:"from NYC to Atlantic City, great for family getaways"},
+  {key:"SUC", name:"Super Chief", miles:120, scenic:1.4, baseDemand:540, baseFare:70, access:4600, difficulty:1.1, steamFavoured:false,
+   blurb:"The supered version of the chief."},
+  {key:"OVE", name:"Overland Limited", miles:145, scenic:1.35, baseDemand:470, baseFare:72, access:5000, difficulty:1.2, steamFavoured:false,
+   blurb:"across the first transcon — miles rack up the fares and the wear."},
+  {key:"DLT", name:"Daylight", miles:106, scenic:1.3, baseDemand:520, baseFare:66, access:4200, difficulty:1.15, steamFavoured:true,
+   blurb:"LA to San Fran past the californian landscapr."},
+  {key:"HIA", name:"Hiawatha", miles:98, scenic:1.25, baseDemand:560, baseFare:64, access:4000, difficulty:1.1, steamFavoured:true,
+   blurb:"Chicago to tein cities along the Hiawatha route. Swift a foot."},
+  {key:"CRE", name:"Crescent Limited", miles:170, scenic:1.15, baseDemand:500, baseFare:80, access:6000, difficulty:1.25, steamFavoured:false,
+   blurb:"A fast service to New Orleans — long and thirsty."}
 ];
 
 const SEASONS = ["Spring","Summer","Autumn","Winter"];
